@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>تحميل تطبيق رفيق المسلم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            /* منع ظهور المربع الرمادي عند الضغط في الهواتف */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #F4F6F5; /* نفس الخلفية المريحة للعين */
+            min-height: 100vh;
+            color: #2C3E35;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* الزخرفة الموحدة للتطبيق */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.02"><path fill="none" stroke="%232C3E35" stroke-width="1" d="M400 50 L450 150 L550 150 L475 225 L500 325 L400 275 L300 325 L325 225 L250 150 L350 150 Z M400 50 L400 275 M475 225 L325 225 M500 325 L300 325 M450 150 L350 150"/><circle cx="400" cy="400" r="80" stroke="%232C3E35" fill="none"/><circle cx="400" cy="400" r="120" stroke="%232C3E35" fill="none" stroke-dasharray="5 5"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* الإضاءة الخلفية الناعمة */
+        .bg-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: rgba(44, 62, 53, 0.08);
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+            bottom: -50px;
+            left: -100px;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+        .bg-glow.right {
+            top: -100px;
+            right: -100px;
+            left: auto;
+            bottom: auto;
+            background: rgba(184, 155, 94, 0.06);
+            animation-delay: -6s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            100% { transform: translate(20px, 40px) scale(1.1); opacity: 1; }
+        }
+
+        .container {
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* كارت الزجاج الاحترافي */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px -10px rgba(44, 62, 53, 0.06);
+            padding: 45px 28px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* توهج داخلي خفيف في الكارت */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(184, 155, 94, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* أيقونة التطبيق */
+        .icon-wrapper {
+            width: 110px;
+            height: 110px;
+            background: #FFFFFF;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px auto;
+            font-size: 50px;
+            color: #B89B5E; /* ذهبي مطفي فخم */
+            border: 1px solid rgba(44, 62, 53, 0.05);
+            box-shadow: 0 10px 25px rgba(44, 62, 53, 0.04);
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-family: 'Cairo', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #1A2B22;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #8C9E95;
+            font-weight: 600;
+            margin-bottom: 35px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* زر التحميل الأنيق */
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: #2C3E35;
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 16px 24px;
+            border-radius: 20px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 0 auto;
+            max-width: 320px;
+            box-shadow: 0 12px 24px rgba(44, 62, 53, 0.15);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(44, 62, 53, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: #1A2B22;
+            box-shadow: 0 16px 32px rgba(44, 62, 53, 0.2);
+            color: #FFFFFF;
+        }
+        
+        .download-btn:active {
+            transform: scale(0.96);
+        }
+
+        .download-btn i {
+            font-size: 1.3rem;
+            color: #B89B5E; /* أيقونة الأندرويد بلون ذهبي فخم */
+        }
+
+        .version-info {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: rgba(45, 90, 76, 0.6);
+            font-weight: 700;
+        }
+
+        /* مربع الإرشادات بستايل Nested Glassmorphism */
+        .instructions {
+            text-align: right;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 24px;
+            border-radius: 24px;
+            margin-top: 40px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 8px 24px rgba(44, 62, 53, 0.03);
+        }
+
+        .instructions h3 {
+            color: #B89B5E;
+            font-size: 1.05rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions ul {
+            padding-right: 24px;
+            font-size: 0.9rem;
+            line-height: 1.9;
+            color: #4A5D53;
+            font-weight: 600;
+            list-style-type: none; /* لتخصيص شكل النقاط */
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        /* تخصيص نقاط القائمة بلون ذهبي هادئ */
+        .instructions li::before {
+            content: "•";
+            color: #B89B5E;
+            font-size: 1.5rem;
+            position: absolute;
+            right: -20px;
+            top: -6px;
+        }
+        
+        .instructions b {
+            color: #1A2B22;
+            font-weight: 800;
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 15px; }
+            .glass-card { padding: 35px 20px; border-radius: 32px; }
+            h1 { font-size: 1.8rem; }
+            .icon-wrapper { width: 90px; height: 90px; font-size: 42px; border-radius: 26px; }
+            .download-btn { font-size: 1.05rem; padding: 14px 20px; }
+            .instructions { padding: 20px; margin-top: 30px; border-radius: 20px; }
+            .subtitle { font-size: 0.85rem; margin-bottom: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow right"></div>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="icon-wrapper">
+                <i class="fas fa-mosque"></i>
+            </div>
+            
+            <h1>رفيق المسلم</h1>
+            <p class="subtitle">تطبيقك إسلامي شامل: القرآن الكريم، مواقيت الصلاة ، وإذاعة القرآن الكريم بث مباشر.</p>
+
+            <a href="رفيق المسلم.apk" download class="download-btn">
+                <i class="fab fa-android"></i>
+                تحميل أحدث إصدار للتطبيق
+            </a>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> طريقة التثبيت:</h3>
+                <ul>
+                    <li>اضغط على زر تحميل أحدث إصدار للتطبيق .</li>
+                    <li>بعد انتهاء التحميل، افتح الملف المُحمل (APK).</li>
+                    <li>إذا ظهرت رسالة أمان، اضغط على <b>الإعدادات</b> وقم بتفعيل <b>السماح من هذا المصدر</b>.</li>
+                    <li>اضغط على <b>تثبيت</b></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

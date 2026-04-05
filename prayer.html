@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>مواقيت الصلاة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    /* منع تحديد (تظليل) النصوص في جميع المتصفحات */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    /* منع ظهور المربع الرمادي/الأزرق عند الضغط على الأزرار في الهواتف */
+    -webkit-tap-highlight-color: transparent;
+    
+    /* منع التكبير بالنقر المزدوج السريع */
+    touch-action: manipulation;
+}
+
+/* السماح بالكتابة في حال إضافة حقول إدخال مستقبلاً */
+input, textarea {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
+
+body {
+            font-family: 'Cairo', sans-serif;
+            background: #F4F6F5; /* نفس لون الخلفية المريح للرئيسية */
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+            position: relative;
+            overflow-x: hidden;
+            color: #2C3E35;
+        }
+
+        /* زخرفة خلفية خفيفة جداً ومتناسقة */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.02"><path fill="none" stroke="%232C3E35" stroke-width="1" d="M400 50 L450 150 L550 150 L475 225 L500 325 L400 275 L300 325 L325 225 L250 150 L350 150 Z M400 50 L400 275 M475 225 L325 225 M500 325 L300 325 M450 150 L350 150"/><circle cx="400" cy="400" r="80" stroke="%232C3E35" fill="none"/><circle cx="400" cy="400" r="120" stroke="%232C3E35" fill="none" stroke-dasharray="5 5"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+/* الشريط العلوي - تصميم زجاجي فاخر */
+.luxury-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    margin-top: 30px; 
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 16px 40px -10px rgba(44, 62, 53, 0.05);
+}
+
+        .location-status {
+            font-size: 0.9rem;
+            color: #1A2B22;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-status i {
+            color: #B89B5E; /* لمسة ذهبية هادئة */
+            animation: pulse 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); text-shadow: 0 0 12px rgba(184, 155, 94, 0.4); }
+            100% { opacity: 0.5; transform: scale(0.95); }
+        }
+
+        .current-time-lux {
+            background: #FFFFFF;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #2C3E35;
+            direction: ltr;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(44, 62, 53, 0.05);
+            box-shadow: 0 4px 12px rgba(44, 62, 53, 0.03);
+        }
+
+        /* البطاقة الرئيسية */
+        .main-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 32px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px -10px rgba(44, 62, 53, 0.06);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .gold-glow {
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(184, 155, 94, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* صف التواريخ */
+        .date-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(44, 62, 53, 0.06);
+            padding-bottom: 16px;
+        }
+
+        .date-badge {
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(44, 62, 53, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .hijri-badge {
+            color: #1A2B22;
+        }
+        .hijri-badge i { color: #B89B5E; }
+
+        .gregorian-badge {
+            color: #4A5D53;
+        }
+        .gregorian-badge i { opacity: 0.7; }
+
+        /* منطقة الصلاة القادمة والعد التنازلي */
+        .prayer-focus {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .next-prayer-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .next-prayer-label {
+            font-size: 0.75rem;
+            color: #8C9E95;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .next-prayer-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1A2B22;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .next-prayer-name i {
+            color: #B89B5E;
+            font-size: 1.4rem;
+        }
+
+        .countdown-container {
+            text-align: left;
+            background: #FFFFFF;
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(44, 62, 53, 0.05);
+            box-shadow: 0 4px 15px rgba(44, 62, 53, 0.03);
+        }
+
+        .countdown {
+            font-size: 1.25rem;
+            font-weight: 800;
+            font-family: 'Courier New', Courier, monospace;
+            color: #1A2B22;
+            letter-spacing: 1px;
+            direction: ltr;
+        }
+
+        .countdown-label {
+            font-size: 0.65rem;
+            color: #8C9E95;
+            text-align: center;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* قائمة الصلوات */
+        .prayers-list {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 28px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 10px 30px rgba(44, 62, 53, 0.03);
+        }
+
+        .prayer-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            margin-bottom: 8px;
+            border-radius: 20px;
+            background: transparent;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid transparent;
+        }
+
+        .prayer-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* تنسيق الصلاة النشطة (القادمة) */
+        .prayer-item.active {
+            background: rgba(255, 255, 255, 0.9);
+            border-right: 4px solid #B89B5E;
+            border-left: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 24px rgba(44, 62, 53, 0.05);
+            transform: scale(1.02);
+        }
+
+        .prayer-name-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #4A5D53;
+        }
+
+        .prayer-icon {
+            color: #8C9E95;
+            font-size: 1.15rem;
+            width: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .prayer-item.active .prayer-name-group {
+            color: #1A2B22;
+            font-weight: 800;
+        }
+
+        .prayer-item.active .prayer-icon {
+            color: #B89B5E;
+            transform: scale(1.1);
+        }
+
+        .prayer-time {
+            font-weight: 700;
+            font-size: 1.05rem;
+            font-family: 'Courier New', Courier, monospace;
+            color: #4A5D53;
+            letter-spacing: 0px;
+        }
+        
+        .prayer-item.active .prayer-time {
+            color: #1A2B22;
+            font-weight: 800;
+        }
+
+        /* شاشة التحميل */
+        #loading {
+            text-align: center;
+            background: rgba(244, 246, 245, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 40px;
+            width: 280px;
+            margin: auto;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px rgba(44, 62, 53, 0.06);
+        }
+
+        .premium-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(184, 155, 94, 0.15);
+            border-top: 3px solid #B89B5E;
+            border-radius: 50%;
+            animation: spin 0.8s cubic-bezier(0.6, 0.2, 0.4, 0.8) infinite;
+            margin: 0 auto 18px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+/* نافيجيشن بار ثابت (تم توحيده مع الرئيسية) */
+.bottom-nav-fixed {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0;
+    right: 0;
+    width: 100%;
+    
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px); 
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 -10px 40px rgba(44, 62, 53, 0.04);
+    
+    z-index: 99999 !important; 
+    
+    padding: 8px 16px env(safe-area-inset-bottom, 6px) !important;
+    
+    transform: translate3d(0, 0, 0) !important; 
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    will-change: transform; 
+    contain: layout; 
+}
+
+        .nav-inner {
+            max-width: 520px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item-bottom {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #8C9E95;
+            background: transparent;
+            border-radius: 20px;
+            padding: 6px 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .nav-item-bottom i {
+            font-size: 1.3rem;
+            transition: transform 0.3s;
+        }
+
+        .nav-item-bottom span {
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: -0.2px;
+            opacity: 0.9;
+        }
+
+        .nav-item-bottom:hover {
+            color: #4A5D53;
+        }
+
+        .nav-item-bottom:active {
+            transform: scale(0.92);
+        }
+
+        /* العنصر النشط (صفحة الصلاة الحالية) */
+        .nav-item-bottom.active {
+            color: #2C3E35;
+        }
+        .nav-item-bottom.active i {
+            color: #B89B5E;
+            transform: translateY(-2px);
+        }
+        .nav-item-bottom.active span {
+            color: #1A2B22;
+            font-weight: 700;
+        }
+
+@media (max-width: 480px) {
+body {
+    padding: 15px;
+    padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px));
+}
+            .container {
+                max-width: 100%;
+            }
+            .nav-item-bottom i {
+                font-size: 1.25rem;
+            }
+            .nav-item-bottom span {
+                font-size: 0.65rem;
+            }
+.bottom-nav-fixed {
+    padding: 8px 10px env(safe-area-inset-bottom, 6px) !important;
+}
+            .luxury-bar {
+                margin-top: 40px;
+                padding: 10px 16px;
+                border-radius: 24px;
+            }
+            .main-card {
+                padding: 20px;
+                border-radius: 28px;
+            }
+            .prayer-item {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <div class="premium-spinner"></div>
+        <span id="loading-text" style="color: #1A2B22; font-weight: 700; font-size: 0.95rem; letter-spacing: -0.3px;">جاري حساب مواقيت القاهرة...</span>
+    </div>
+
+    <div class="container" id="app-container" style="display: none;">
+        
+        <div class="luxury-bar">
+            <div class="location-status" id="location-status">
+                <i class="fas fa-location-dot"></i> <span>القاهرة، مصر</span>
+            </div>
+            <div class="current-time-lux" id="liveClock">--:-- --</div>
+        </div>
+
+        <div class="main-card">
+            <div class="gold-glow"></div>
+            
+            <div class="date-row">
+                <div class="date-badge hijri-badge" id="hijri-date"><i class="fas fa-moon"></i> ...</div>
+                <div class="date-badge gregorian-badge" id="gregorian-date"><i class="fa-regular fa-calendar-alt"></i> ...</div>
+            </div>
+            
+            <div class="prayer-focus">
+                <div class="next-prayer-info">
+                    <span class="next-prayer-label">الصلاة القادمة</span>
+                    <h2 class="next-prayer-name" id="next-prayer-name"><i class="fas fa-mosque"></i> ...</h2>
+                </div>
+                
+                <div class="countdown-container">
+                    <div class="countdown" id="countdown">00:00:00</div>
+                    <div class="countdown-label">متبقي على الأذان</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="prayers-list" id="prayers-list"></div>
+
+    </div>
+
+    <div class="bottom-nav-fixed">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-item-bottom" id="homeNavBtn">
+                <i class="fas fa-home"></i>
+                <span>الرئيسية</span>
+            </a>
+            <a href="quran.html" class="nav-item-bottom" id="quranNavBtn">
+                <i class="fas fa-book-open"></i>
+                <span>المصحف</span>
+            </a>
+            <a href="prayer.html" class="nav-item-bottom active" id="prayerNavBtn">
+                <i class="fas fa-mosque"></i>
+                <span>مواقيت</span>
+            </a>
+            <a href="radio.html" class="nav-item-bottom" id="radioNavBtn">
+                <i class="fas fa-radio"></i>
+                <span>الراديو</span>
+            </a>
+        </div>
+    </div>
+
+<script>
+        // القاموس بدون الشروق
+        const prayersData = {
+            "Fajr": { ar: "الفجر", icon: "fa-cloud-moon" },
+            "Dhuhr": { ar: "الظهر", icon: "fa-sun" },
+            "Asr": { ar: "العصر", icon: "fa-cloud-sun" },
+            "Maghrib": { ar: "المغرب", icon: "fa-cloud-sun" },
+            "Isha": { ar: "العشاء", icon: "fa-moon" }
+        };
+
+        const prayerOrder = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+
+        let timings = {};
+        let nextPrayerKey = "";
+        let countdownInterval;
+
+        // 1. تحديث الساعة
+        function updateLiveClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12 || 12;
+            document.getElementById('liveClock').innerText = `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+        }
+        setInterval(updateLiveClock, 1000);
+        updateLiveClock();
+
+        // 2. جلب مواقيت القاهرة
+        function getCairoTimes() {
+            document.getElementById('loading-text').innerText = "جاري حساب مواقيت الصلاة...";
+            const cairoLat = 30.044420;
+            const cairoLng = 31.235712;
+            fetchPrayerTimes(cairoLat, cairoLng);
+        }
+
+        // 3. التعديل السحري: استخدام API النتيجة الشهرية لبرمجة الأيام القادمة
+        async function fetchPrayerTimes(lat, lng) {
+            try {
+                const now = new Date();
+                const month = now.getMonth() + 1;
+                const year = now.getFullYear();
+
+                // هنجيب نتيجة الشهر كله من السيرفر بدل يوم واحد
+                const url = `https://api.aladhan.com/v1/calendar?latitude=${lat}&longitude=${lng}&method=5&month=${month}&year=${year}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.code !== 200) throw new Error("API error");
+
+                const days = data.data;
+
+                // استخراج تاريخ النهاردة للواجهة
+                const formatNum = (n) => n.toString().padStart(2, '0');
+                const todayDateString = formatNum(now.getDate()) + "-" + formatNum(month) + "-" + year;
+
+                let todayData = days.find(d => d.date.gregorian.date === todayDateString);
+                if (!todayData) todayData = days[now.getDate() - 1]; // احتياطي
+
+                const dateData = todayData.date;
+                timings = todayData.timings;
+
+                document.getElementById('gregorian-date').innerHTML = `<i class="fa-regular fa-calendar-alt"></i> ${dateData.gregorian.date}`;
+                document.getElementById('hijri-date').innerHTML = `<i class="fas fa-moon"></i> ${dateData.hijri.day} ${dateData.hijri.month.ar} ${dateData.hijri.year}`;
+
+                updateUI(); // تحديث الشاشة
+
+                // 🌟 السحر هنا: برمجة منبهات أسبوع كامل في الخلفية دفعة واحدة 🌟
+                scheduleFutureAlarms(days);
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app-container').style.display = 'block';
+
+                if (countdownInterval) clearInterval(countdownInterval);
+                countdownInterval = setInterval(updateCountdown, 1000);
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `
+                    <div style="color:#2C3E35; font-size:1rem; margin-bottom:12px; font-weight:700;">حدث خطأ في جلب البيانات</div>
+                    <button onclick="getCairoTimes()" style="background:#2C3E35; border:none; padding:10px 24px; border-radius:24px; color:#fff; cursor:pointer; font-family:'Cairo'; font-weight:600; font-size:0.9rem;">إعادة المحاولة</button>
+                `;
+            }
+        }
+
+        // دالة جديدة لبرمجة منبهات الأيام القادمة أوتوماتيكياً
+        function scheduleFutureAlarms(days) {
+            if (!window.Android) return;
+            const now = new Date();
+            const sevenDaysLater = new Date();
+            sevenDaysLater.setDate(now.getDate() + 7); // بنبرمج 7 أيام قادمة فقط
+
+            days.forEach(day => {
+                const dateStr = day.date.gregorian.date;
+                const dayTimings = day.timings;
+
+                prayerOrder.forEach(key => {
+                    const timeStr = dayTimings[key].split(' ')[0];
+                    
+                    const parts = dateStr.split('-');
+                    const dd = parseInt(parts[0]);
+                    const mm = parseInt(parts[1]) - 1; // الشهور في جافاسكريبت تبدأ من 0
+                    const yyyy = parseInt(parts[2]);
+                    
+                    const timeParts = timeStr.split(':');
+                    const hh = parseInt(timeParts[0]);
+                    const min = parseInt(timeParts[1]);
+                    
+                    const prayerDate = new Date(yyyy, mm, dd, hh, min, 0);
+
+                    // لو وقت الصلاة في خلال الـ 7 أيام الجاية، ابعته للأندرويد
+                    if (prayerDate > now && prayerDate <= sevenDaysLater) {
+                        // بنعمل كود فريد مستحيل يتكرر لكل صلاة في كل يوم 
+                        const uniqueId = key + "_" + dateStr; 
+                        Android.scheduleAdhan(uniqueId, prayersData[key].ar, prayerDate.getTime());
+                    }
+                });
+            });
+        }
+
+        function getPrayerDateObj(timeStr) {
+            const [hours, minutes] = timeStr.split(' ')[0].split(':');
+            const dateObj = new Date();
+            dateObj.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+            return dateObj;
+        }
+
+        function formatTime12(timeStr) {
+            let [hours, minutes] = timeStr.split(' ')[0].split(':');
+            hours = parseInt(hours);
+            const ampm = hours >= 12 ? 'م' : 'ص';
+            hours = hours % 12 || 12;
+            return `${hours}:${minutes} ${ampm}`;
+        }
+
+        function updateUI() {
+            const prayersListDiv = document.getElementById('prayers-list');
+            prayersListDiv.innerHTML = '';
+            const now = new Date();
+            let nextFound = false;
+
+            prayerOrder.forEach(key => {
+                if (!timings[key]) return;
+                const prayerTimeStr = timings[key].split(' ')[0];
+                const prayerDate = getPrayerDateObj(prayerTimeStr);
+                const prayerDiv = document.createElement('div');
+                prayerDiv.className = 'prayer-item';
+                prayerDiv.id = `prayer-${key}`;
+
+                if (prayerDate > now && !nextFound) {
+                    nextPrayerKey = key;
+                    nextFound = true;
+                    prayerDiv.classList.add('active');
+                    document.getElementById('next-prayer-name').innerHTML = `<i class="fas ${prayersData[key].icon}"></i> ${prayersData[key].ar}`;
+                }
+
+                prayerDiv.innerHTML = `
+                    <div class="prayer-name-group">
+                        <i class="fas ${prayersData[key].icon} prayer-icon"></i>
+                        <span>${prayersData[key].ar}</span>
+                    </div>
+                    <span class="prayer-time">${formatTime12(prayerTimeStr)}</span>
+                `;
+                prayersListDiv.appendChild(prayerDiv);
+            });
+
+            if (!nextFound) {
+                nextPrayerKey = "Fajr";
+                document.getElementById('next-prayer-name').innerHTML = `<i class="fas ${prayersData["Fajr"].icon}"></i> ${prayersData["Fajr"].ar}`;
+                const fajrElement = document.getElementById('prayer-Fajr');
+                if (fajrElement) fajrElement.classList.add('active');
+            }
+        }
+
+        function updateCountdown() {
+            if (!nextPrayerKey || !timings[nextPrayerKey]) return;
+
+            const now = new Date();
+            let nextPrayerDate = getPrayerDateObj(timings[nextPrayerKey]);
+
+            if (nextPrayerKey === "Fajr") {
+                const currentHour = now.getHours();
+                const fajrHour = parseInt(timings["Fajr"].split(' ')[0].split(':')[0]);
+                if ((currentHour >= fajrHour && now > nextPrayerDate) || (now > nextPrayerDate && currentHour >= fajrHour)) {
+                    nextPrayerDate.setDate(nextPrayerDate.getDate() + 1);
+                }
+            } else {
+                if (now > nextPrayerDate) {
+                    if(countdownInterval) clearInterval(countdownInterval);
+                    setTimeout(getCairoTimes, 2000);
+                    return;
+                }
+            }
+
+            const diff = nextPrayerDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').innerHTML = "حان الوقت";
+                if(countdownInterval) clearInterval(countdownInterval);
+                setTimeout(getCairoTimes, 3000);
+                return;
+            }
+
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            const formatNum = (n) => n.toString().padStart(2, '0');
+
+            document.getElementById('countdown').innerHTML = `${formatNum(hours)}:${formatNum(minutes)}:${formatNum(seconds)}`;
+        }
+
+        getCairoTimes();
+    </script>
+</body>
+</html>

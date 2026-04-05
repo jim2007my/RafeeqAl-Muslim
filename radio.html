@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>الراديو</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    /* منع تحديد (تظليل) النصوص */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    /* منع ظهور المربع الرمادي عند الضغط على الأزرار */
+    -webkit-tap-highlight-color: transparent;
+    
+    /* منع التكبير بالنقر المزدوج السريع */
+    touch-action: manipulation;
+}
+
+/* احتياطياً: السماح بالكتابة إذا قررت إضافة أي حقول بحث مستقبلاً */
+input, textarea {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
+
+body {
+            font-family: 'Cairo', sans-serif;
+            background: #F4F6F5; /* نفس لون الخلفية المريح للعين */
+            min-height: 100vh;
+            color: #2C3E35;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+        }
+
+        /* خلفية مزخرفة أنيقة جداً وموحدة */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.02"><path fill="none" stroke="%232C3E35" stroke-width="1" d="M400 50 L450 150 L550 150 L475 225 L500 325 L400 275 L300 325 L325 225 L250 150 L350 150 Z M400 50 L400 275 M475 225 L325 225 M500 325 L300 325 M450 150 L350 150"/><circle cx="400" cy="400" r="80" stroke="%232C3E35" fill="none"/><circle cx="400" cy="400" r="120" stroke="%232C3E35" fill="none" stroke-dasharray="5 5"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ظلال ضوئية عصرية وأنعم */
+        .bg-glow {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: rgba(44, 62, 53, 0.08);
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+            bottom: -50px;
+            left: -100px;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+        .bg-glow.right {
+            top: -100px;
+            right: -100px;
+            left: auto;
+            bottom: auto;
+            background: rgba(184, 155, 94, 0.06);
+            animation-delay: -6s;
+        }
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            100% { transform: translate(20px, 40px) scale(1.1); opacity: 1; }
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px 18px; 
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center; 
+            position: relative;
+            z-index: 5;
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* بطاقة زجاجية احترافية وموحدة مع باقي الصفحات */
+        .glass-card {
+            width: 100%; 
+            margin-bottom: 0; 
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 40px -10px rgba(44, 62, 53, 0.06);
+            padding: 40px 24px;
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* توهج ذهبي خفيف داخل الكارت */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(184, 155, 94, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .glass-card.playing {
+            box-shadow: 0 25px 45px -12px rgba(184, 155, 94, 0.15);
+            border-color: rgba(184, 155, 94, 0.3);
+        }
+
+        /* أيقونة الراديو المتطورة */
+        .icon-wrapper {
+            width: 100px;
+            height: 100px;
+            background: #FFFFFF;
+            border-radius: 30px; /* شكل عصري أنيق بدل الدائرة الكاملة */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px auto;
+            font-size: 42px;
+            color: #B89B5E; /* لون ذهبي مطفي */
+            border: 1px solid rgba(44, 62, 53, 0.05);
+            box-shadow: 0 10px 25px rgba(44, 62, 53, 0.04);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card.playing .icon-wrapper {
+            transform: scale(1.05);
+            color: #2C3E35;
+            box-shadow: 0 12px 30px rgba(184, 155, 94, 0.15);
+            border-color: rgba(184, 155, 94, 0.2);
+        }
+
+        h1 {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1A2B22;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #8C9E95;
+            font-weight: 600;
+            margin-bottom: 35px;
+            letter-spacing: 0px;
+        }
+
+        /* متحرك الموجات الصوتية الفخم */
+        .visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 5px;
+            height: 40px;
+            margin-bottom: 40px;
+        }
+
+        .bar {
+            width: 4px;
+            background: rgba(184, 155, 94, 0.3); /* لون خامل هادئ */
+            border-radius: 4px;
+            height: 6px;
+            transition: all 0.3s ease;
+        }
+
+        /* تفعيل الموجات عند التشغيل بلون ذهبي واضح */
+        .playing .bar {
+            background: #B89B5E;
+            animation: soundBounce 0.8s infinite alternate cubic-bezier(0.6, 0.2, 0.4, 0.8);
+        }
+
+        .bar:nth-child(1) { animation-delay: 0.1s; }
+        .bar:nth-child(2) { animation-delay: 0.4s; }
+        .bar:nth-child(3) { animation-delay: 0.2s; }
+        .bar:nth-child(4) { animation-delay: 0.5s; }
+        .bar:nth-child(5) { animation-delay: 0.3s; }
+        .bar:nth-child(6) { animation-delay: 0.6s; }
+        .bar:nth-child(7) { animation-delay: 0.15s; }
+
+        @keyframes soundBounce {
+            0% { height: 6px; opacity: 0.6; }
+            100% { height: 35px; opacity: 1; }
+        }
+
+        /* زر التشغيل الأنيق جداً */
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .play-btn {
+            background: #2C3E35;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 12px 24px rgba(44, 62, 53, 0.15);
+            color: #FFFFFF;
+            font-size: 26px;
+            padding-left: 4px; /* لضبط أيقونة الـ Play في المنتصف بصرياً */
+        }
+        
+        /* ضبط المنتصف عند التبديل لأيقونة التوقف */
+        .playing .play-btn {
+            padding-left: 0;
+            background: #1A2B22;
+            box-shadow: 0 15px 30px rgba(44, 62, 53, 0.2);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.08) translateY(-2px);
+            background: #1A2B22;
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* دعاء ختامي (إن وجد) */
+        .footer-message {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #8C9E95;
+            font-weight: 600;
+        }
+
+/* نافيجيشن بار ثابت وموحد */
+.bottom-nav-fixed {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0;
+    right: 0;
+    width: 100%;
+    
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px); 
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 -10px 40px rgba(44, 62, 53, 0.04);
+    
+    z-index: 99999 !important; 
+    
+    padding: 8px 16px env(safe-area-inset-bottom, 6px) !important;
+    
+    transform: translate3d(0, 0, 0) !important; 
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    will-change: transform; 
+    contain: layout; 
+}
+
+        .nav-inner {
+            max-width: 520px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item-bottom {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            text-decoration: none;
+            color: #8C9E95;
+            background: transparent;
+            border-radius: 20px;
+            padding: 6px 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            border: none;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .nav-item-bottom i {
+            font-size: 1.3rem;
+            transition: transform 0.3s;
+        }
+
+        .nav-item-bottom span {
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: -0.2px;
+            opacity: 0.9;
+        }
+
+        .nav-item-bottom:hover {
+            color: #4A5D53;
+        }
+
+        .nav-item-bottom:active {
+            transform: scale(0.92);
+        }
+
+        .nav-item-bottom.active {
+            color: #2C3E35;
+        }
+        .nav-item-bottom.active i {
+            color: #B89B5E;
+            transform: translateY(-2px);
+        }
+        .nav-item-bottom.active span {
+            color: #1A2B22;
+            font-weight: 700;
+        }
+
+@media (max-width: 480px) {
+            .container { 
+                padding: 15px; 
+                min-height: calc(100vh - (80px + env(safe-area-inset-bottom))); 
+            }
+            .glass-card { padding: 35px 20px; border-radius: 32px; }
+            .icon-wrapper { width: 85px; height: 85px; font-size: 36px; border-radius: 26px; }
+            h1 { font-size: 1.6rem; }
+            .subtitle { font-size: 0.85rem; }
+            .play-btn { width: 65px; height: 65px; font-size: 22px; }
+            .visualizer { height: 35px; gap: 4px; }
+            .bar { width: 4px; }
+            .nav-item-bottom i { font-size: 1.25rem; }
+            .nav-item-bottom span { font-size: 0.65rem; }
+.bottom-nav-fixed {
+    padding: 8px 10px env(safe-area-inset-bottom, 6px) !important;
+}
+        }
+    </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="bg-glow right"></div>
+
+<div class="container">
+    <div class="glass-card" id="playerCard">
+        <div class="icon-wrapper">
+            <i class="fas fa-radio"></i>
+        </div>
+        <h1>الراديو</h1>
+        <div class="subtitle">إذاعة القرآن الكريم – بث مباشر</div>
+
+        <div class="visualizer" id="visualizer">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <audio id="audioPlayer" preload="none">
+            <source src="https://n07.radiojar.com/8s5u5tpdtwzuv" type="audio/mpeg">
+            متصفحك لا يدعم تشغيل الملفات الصوتية.
+        </audio>
+
+        <div class="controls">
+            <button class="play-btn" id="playPauseBtn">
+                <i class="fas fa-play" id="playIcon"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-nav-fixed">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-item-bottom" id="homeNavBtn">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="quran.html" class="nav-item-bottom" id="quranNavBtn">
+            <i class="fas fa-book-open"></i>
+            <span>المصحف</span>
+        </a>
+        <a href="prayer.html" class="nav-item-bottom" id="prayerNavBtn">
+            <i class="fas fa-mosque"></i>
+            <span>مواقيت</span>
+        </a>
+        <a href="radio.html" class="nav-item-bottom active" id="radioNavBtn">
+            <i class="fas fa-radio"></i>
+            <span>الراديو</span>
+        </a>
+    </div>
+</div>
+
+<script>
+    const audio = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playPauseBtn');
+    const playIcon = document.getElementById('playIcon');
+    const playerCard = document.getElementById('playerCard');
+
+    let isPlaying = false;
+
+    // تعيين مستوى الصوت الافتراضي (الحد الأقصى)
+    audio.volume = 1;
+
+    // تشغيل/إيقاف
+    function togglePlay() {
+        if (isPlaying) {
+            audio.pause();
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            playerCard.classList.remove('playing');
+        } else {
+            audio.load();
+            audio.play().then(() => {
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+                playerCard.classList.add('playing');
+                isPlaying = true;
+            }).catch((err) => {
+                console.warn("Auto-play prevented or stream error:", err);
+                alert("تعذر تشغيل البث المباشر. قد يكون التطبيق منع التشغيل التلقائي. يرجى النقر مرة أخرى.");
+            });
+        }
+    }
+
+    playBtn.addEventListener('click', () => {
+        if (isPlaying) {
+            audio.pause();
+            isPlaying = false;
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play');
+            playerCard.classList.remove('playing');
+        } else {
+            audio.load();
+            audio.play().then(() => {
+                isPlaying = true;
+                playIcon.classList.remove('fa-play');
+                playIcon.classList.add('fa-pause');
+                playerCard.classList.add('playing');
+            }).catch((err) => {
+                console.error("Playback failed:", err);
+                alert("لا يمكن تشغيل البث حالياً. تحقق من اتصالك بالإنترنت وحاول مجدداً.");
+                isPlaying = false;
+            });
+        }
+    });
+
+    // في حال انتهى البث لأي سبب
+    audio.addEventListener('ended', () => {
+        if (isPlaying) {
+            // حاول إعادة التشغيل إذا انقطع
+            audio.load();
+            audio.play().catch(() => {});
+        }
+    });
+
+    // إظهار رسالة عند الخطأ
+    audio.addEventListener('error', (e) => {
+        console.error("Audio error", e);
+        if (isPlaying) {
+            alert("حدث انقطاع في البث المباشر. سيتم إعادة المحاولة تلقائياً.");
+            setTimeout(() => {
+                audio.load();
+                audio.play().catch(() => {});
+            }, 2000);
+        }
+    });
+</script>
+</body>
+</html>
