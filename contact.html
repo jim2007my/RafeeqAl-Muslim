@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>الاستفسارات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #F7F9F8; 
+            min-height: 100vh;
+            color: #2C3E35;
+            position: relative;
+            overflow-x: hidden;
+            padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.02"><path fill="none" stroke="%232C3E35" stroke-width="1" d="M400 50 L450 150 L550 150 L475 225 L500 325 L400 275 L300 325 L325 225 L250 150 L350 150 Z M400 50 L400 275 M475 225 L325 225 M500 325 L300 325 M450 150 L350 150"/><circle cx="400" cy="400" r="80" stroke="%232C3E35" fill="none"/><circle cx="400" cy="400" r="120" stroke="%232C3E35" fill="none" stroke-dasharray="5 5"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 40px 18px 30px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .glass-card {
+            background: #FFFFFF;
+            border-radius: 36px;
+            border: 1px solid #E8EFEA;
+            box-shadow: 0 12px 30px rgba(44, 62, 53, 0.04);
+            padding: 40px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .icon-circle {
+            width: 90px;
+            height: 90px;
+            background: #E4F1EC;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+            color: #0A6C58; 
+            border: 1px solid #E8EFEA;
+            box-shadow: 0 8px 24px rgba(44, 62, 53, 0.03);
+        }
+
+        .header-section h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #2C3E35;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-section p {
+            font-size: 0.95rem;
+            color: #7A938C;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .guidelines-box {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .guideline-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #F7F9F8;
+            padding: 16px 18px;
+            border-radius: 24px;
+            border: 1px solid #E8EFEA;
+            box-shadow: 0 4px 12px rgba(44, 62, 53, 0.02);
+        }
+
+        .g-icon {
+            width: 48px;
+            height: 48px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #0A6C58;
+            border: 1px solid #E8EFEA;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(44, 62, 53, 0.02);
+        }
+
+        .g-text h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #2C3E35;
+            margin-bottom: 4px;
+        }
+
+        .g-text p {
+            font-size: 0.85rem;
+            color: #7A938C;
+            font-weight: 600;
+        }
+
+        .contact-info-box {
+            margin-top: 20px;
+            background: #FFFFFF;
+            border: 1px solid #E8EFEA;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            padding: 18px 20px;
+            box-shadow: 0 8px 24px rgba(44, 62, 53, 0.04);
+            position: relative;
+            z-index: 2;
+            text-decoration: none; 
+            cursor: pointer; 
+        }
+
+        .contact-icon {
+            width: 52px;
+            height: 52px;
+            background: #E4F1EC;
+            color: #0A6C58;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-left: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(10, 108, 88, 0.1);
+        }
+
+        .contact-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #7A938C;
+        }
+
+        .contact-number {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #0A6C58;
+            letter-spacing: 1px;
+            font-family: 'Cairo', sans-serif;
+            direction: ltr;
+            text-align: right;
+        }
+
+/* =========================================
+   كود شريط التنقل السفلي الموحد لجميع الصفحات
+   ========================================= */
+.bottom-nav-fixed {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px); 
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid #E8EFEA;
+    box-shadow: 0 -4px 20px rgba(44, 62, 53, 0.04);
+    z-index: 99999 !important; 
+    /* توحيد المسافات مع دعم الشاشات الحديثة */
+    padding: 8px 16px calc(8px + env(safe-area-inset-bottom, 0px)) !important;
+    transform: translate3d(0, 0, 0) !important; 
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    will-change: transform; 
+    contain: layout; 
+}
+
+.nav-inner {
+    max-width: 520px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-item-bottom {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    text-decoration: none;
+    color: #7A938C;
+    background: transparent;
+    border-radius: 20px;
+    padding: 6px 0;
+    cursor: pointer;
+    border: none;
+    font-family: 'Cairo', sans-serif;
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-item-bottom i {
+    font-size: 1.25rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-item-bottom span {
+    font-weight: 600;
+    font-size: 0.7rem;
+    letter-spacing: -0.2px;
+    transition: font-weight 0.2s ease, color 0.2s ease;
+}
+
+.nav-item-bottom:active {
+    transform: scale(0.95);
+}
+
+/* حالة الصفحة الحالية (Active) */
+.nav-item-bottom.active { 
+    color: #0A6C58; 
+}
+.nav-item-bottom.active i { 
+    color: #0A6C58; 
+    transform: translateY(-2px); 
+}
+.nav-item-bottom.active span { 
+    font-weight: 700; 
+    color: #0A6C58; 
+}
+
+        @media (max-width: 480px) {
+            .container { padding: 15px 12px 20px; }
+            .glass-card { padding: 35px 20px; border-radius: 32px; }
+            .header-section h1 { font-size: 1.6rem; }
+            .icon-circle { width: 80px; height: 80px; font-size: 34px; border-radius: 22px; }
+            .g-icon { width: 42px; height: 42px; font-size: 1.15rem; border-radius: 14px; }
+            .contact-icon { width: 46px; height: 46px; font-size: 1.6rem; border-radius: 14px; }
+            .contact-number { font-size: 1.15rem; }
+.nav-item-bottom i { font-size: 1.25rem; }
+    .nav-item-bottom span { font-size: 0.65rem; }
+    .bottom-nav-fixed { padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px)) !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="glass-card">
+        
+        <div class="header-section">
+            <div class="icon-circle">
+                <i class="fas fa-headset"></i>
+            </div>
+            <h1>تواصل معانا</h1>
+            <p>يسعدنا تواصلك معانا في أي وقت، إحنا موجودين 24 ساعة.</p>
+        </div>
+
+        <div class="guidelines-box">
+            <div class="guideline-item">
+                <div class="g-icon"><i class="fas fa-question-circle"></i></div>
+                <div class="g-text">
+                    <h3>الاستفسارات</h3>
+                    <p>تقدر تسأل في أي حاجة وهنرد عليك في أقرب وقت.</p>
+                </div>
+            </div>
+
+            <div class="guideline-item">
+                <div class="g-icon"><i class="fas fa-lightbulb"></i></div>
+                <div class="g-text">
+                    <h3>اقتراحات وتطوير</h3>
+                    <p>مستني أفكارك عشان نضيف ميزات جديدة للتطبيق.</p>
+                </div>
+            </div>
+
+            <div class="guideline-item">
+                <div class="g-icon"><i class="fas fa-headset"></i></div>
+                <div class="g-text">
+                    <h3>الدعم الفني</h3>
+                    <p>لو واجهتك أي مشكلة جوه التطبيق، متترددش إنك تبلغنا.</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://wa.me/201070817647" class="contact-info-box" target="_blank" rel="noopener noreferrer">
+            <div class="contact-icon">
+                <i class="fab fa-whatsapp"></i>
+            </div>
+            <div class="contact-details">
+                <span class="contact-label">كلمني على واتساب هنا</span>
+                <span class="contact-number">01070817647</span>
+            </div>
+        </a>
+
+    </div>
+</div>
+
+<div class="bottom-nav-fixed">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-item-bottom">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="quran.html" class="nav-item-bottom">
+            <i class="fas fa-book-open"></i>
+            <span>المصحف</span>
+        </a>
+        <a href="prayer.html" class="nav-item-bottom">
+            <i class="fas fa-mosque"></i>
+            <span>مواقيت</span>
+        </a>
+        <a href="radio.html" class="nav-item-bottom">
+            <i class="fas fa-radio"></i>
+            <span>الراديو</span>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
