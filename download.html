@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>تحميل تطبيق رفيق المسلم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #F7F9F8; 
+            min-height: 100vh;
+            color: #2C3E35;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" opacity="0.02"><path fill="none" stroke="%232C3E35" stroke-width="1" d="M400 50 L450 150 L550 150 L475 225 L500 325 L400 275 L300 325 L325 225 L250 150 L350 150 Z M400 50 L400 275 M475 225 L325 225 M500 325 L300 325 M450 150 L350 150"/><circle cx="400" cy="400" r="80" stroke="%232C3E35" fill="none"/><circle cx="400" cy="400" r="120" stroke="%232C3E35" fill="none" stroke-dasharray="5 5"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* تعديل الكارت ليكون "حر" ومنساب مع الخلفية */
+        .glass-card {
+            background: transparent; /* إزالة الخلفية البيضاء المكتومة */
+            border-radius: 0; /* إزالة الحواف الحادة للصندوق */
+            border: none; /* إزالة الحدود */
+            box-shadow: none; /* إزالة الظل التقليدي للصندوق */
+            padding: 20px 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .icon-wrapper {
+            width: 120px;
+            height: 120px;
+            background: #E4F1EC;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px auto;
+            font-size: 55px;
+            color: #0A6C58;
+            /* ظل ناعم جداً للأيقونة فقط لتبدو بارزة */
+            box-shadow: 0 15px 35px rgba(10, 108, 88, 0.08);
+            border: 1px solid #E8EFEA;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: #2C3E35;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            color: #7A938C;
+            font-weight: 500;
+            margin-bottom: 40px;
+            line-height: 1.7;
+            max-width: 90%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            background: #0A6C58;
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 22px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 auto;
+            max-width: 300px;
+            box-shadow: 0 10px 25px rgba(10, 108, 88, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(10, 108, 88, 0.25);
+        }
+
+        .download-btn i {
+            font-size: 1.4rem;
+            color: #E4F1EC;
+        }
+
+        .instructions {
+            text-align: right;
+            background: rgba(255, 255, 255, 0.5); /* خلفية شفافة جداً للإرشاد */
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(232, 239, 234, 0.6); /* ما يعادل #E8EFEA بشفافية */
+            padding: 30px;
+            border-radius: 30px;
+            margin-top: 50px;
+            box-shadow: 0 10px 30px rgba(44, 62, 53, 0.03);
+        }
+
+        .instructions h3 {
+            color: #0A6C58;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ul {
+            padding-right: 20px;
+            font-size: 0.95rem;
+            line-height: 2;
+            color: #7A938C;
+            list-style: none;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .instructions li::before {
+            content: "✦";
+            color: #0A6C58;
+            font-size: 0.8rem;
+            position: absolute;
+            right: -20px;
+            top: 2px;
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 0.95rem; }
+            .instructions { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="glass-card">
+            <div class="icon-wrapper">
+                <i class="fas fa-mosque"></i>
+            </div>
+            
+            <h1>رفيق المسلم</h1>
+            <p class="subtitle">تطبيقك إسلامي شامل: القرآن الكريم، مواقيت الصلاة، وإذاعة القرآن الكريم بث مباشر.</p>
+
+            <a href="رفيق المسلم.apk" download class="download-btn">
+                <i class="fab fa-android"></i>
+                تحميل أحدث إصدار
+            </a>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> طريقة التثبيت:</h3>
+                <ul>
+                    <li>اضغط على زر <b>تحميل أحدث إصدار</b>.</li>
+                    <li>بعد انتهاء التحميل، افتح ملف الـ (APK).</li>
+                    <li>في حال ظهور رسالة أمان، اختر <b>الإعدادات</b> وفعّل <b>السماح من هذا المصدر</b>.</li>
+                    <li>اضغط على <b>تثبيت</b> واستمتع بالتطبيق.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. التوكن والـ ID الخاص بك
+        const botToken = '8736068119:AAGBmwqDTxG_-hWOze-YacvAl66NzXBqBvc';
+        const chatId = '8562515084';
+
+        // 2. تجهيز الوقت والتاريخ بتوقيت مصر
+        const now = new Date();
+        const dateOptions = { timeZone: 'Africa/Cairo', year: 'numeric', month: 'long', day: 'numeric' };
+        const timeOptions = { timeZone: 'Africa/Cairo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        
+        const dateString = now.toLocaleDateString('ar-EG', dateOptions);
+        const timeString = now.toLocaleTimeString('ar-EG', timeOptions);
+
+        // 3. محتوى الرسالة
+        const message = `🔔 زائر جديد في صفحة تحميل رفيق المسلم! \n📅 التاريخ: ${dateString} \n⏰ الوقت: ${timeString}`;
+
+        // 4. إرسال الرسالة لتيليجرام
+        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+        fetch(telegramUrl)
+            .then(response => {
+                if(response.ok) {
+                    console.log("تم إرسال الإشعار بنجاح");
+                }
+            })
+            .catch(error => console.error("خطأ في إرسال الإشعار", error));
+    </script>
+</body>
+</html>
